@@ -1,0 +1,2 @@
+# DynamicDataSourceDemo
+动态数据源以及利用MyBatis插件实现读写分离的Demo
