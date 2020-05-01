@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.lshtom.dao.mapper.UserDAO">
+
+    <select id="query" resultType="com.github.lshtom.dao.model.User">
+        SELECT * FROM user
+    </select>
+
+    <select id="selectById" resultType="com.github.lshtom.dao.model.User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.github.lshtom.dao.model.User">
+        INSERT INTO user(name,age,sex,create_date) VALUES (#{name},#{age},#{sex},#{createDate})
+    </insert>
+
+</mapper>
