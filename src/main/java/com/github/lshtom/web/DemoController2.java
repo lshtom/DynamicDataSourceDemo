@@ -37,4 +37,9 @@ public class DemoController2 {
     public User findById(@PathVariable Long id) {
         return userServive.findById(id);
     }
+
+    @GetMapping("user/doSomething")
+    public List<User> doSomething(User user) {
+        return userServive.doSomething(user);
+    }
 }

@@ -11,4 +11,6 @@ public interface UserServive {
     List<User> query();
 
     User findById(Long id);
+
+    List<User> doSomething(User user);
 }
