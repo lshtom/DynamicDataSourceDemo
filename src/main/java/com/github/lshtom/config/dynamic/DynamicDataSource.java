@@ -3,9 +3,13 @@ package com.github.lshtom.config.dynamic;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,5 +100,37 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     public static void clearDataSourceBinding() {
         DATA_SOURCE_NAME_BINDING.remove();
+    }
+
+    /***
+     * 返回Connection代理对象
+     */
+    @Override
+    public Connection getConnection() throws SQLException {
+        return (Connection) Proxy.newProxyInstance(ConnectionProxy.class.getClassLoader(), new Class<?>[] {ConnectionProxy.class},
+            new ConnectionProxyInvocationHandler(this));
+    }
+
+    /***
+     * 返回Connection代理对象
+     */
+    @Override
+    public Connection getConnection(String username, String password) throws SQLException {
+        return (Connection) Proxy.newProxyInstance(ConnectionProxy.class.getClassLoader(), new Class<?>[] {ConnectionProxy.class},
+            new ConnectionProxyInvocationHandler(this, username, password));
+    }
+
+    /**
+     * 获取目标数据源的连接对象（！非代理Connection）
+     */
+    public Connection getTargetConnection() throws SQLException {
+        return super.getConnection();
+    }
+
+    /**
+     * 获取目标数据源的连接对象（！非代理Connection）
+     */
+    public Connection getTargetConnection(String username,String password) throws SQLException {
+        return super.getConnection(username, password);
     }
 }
